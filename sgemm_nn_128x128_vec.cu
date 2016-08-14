@@ -1,5 +1,5 @@
 extern "C"
-__global__ void __launch_bounds__(256) sgemm_nt_128x128
+__global__ void __launch_bounds__(256) sgemm_nn_128x128_vec
 (
  const float* param_A,
  const float* param_B,
@@ -7,7 +7,7 @@ __global__ void __launch_bounds__(256) sgemm_nt_128x128
  float        param_alpha,
  float        param_beta,
  int          param_lda,
- int          param_ldb,
+ int          param_ldb8,  
  int          param_ldc,
  int          param_m,
  int          param_n,

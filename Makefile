@@ -1,4 +1,5 @@
-BINS := sgemm_nn_128x128 sgemm_nt_128x128 sgemm_tn_128x128
+BINS := sgemm_nn_128x128 sgemm_nt_128x128 sgemm_tn_128x128 \
+  sgemm_nn_128x128_vec
 TARGETS := $(addsuffix .cubin, $(BINS))
 TEMPLATES := $(addsuffix _template.cubin, $(BINS))
 
