@@ -130,8 +130,11 @@ REMAINDER:
 <CODE>
     our $vec;
     return $vec ? q{
+      // m must be a multiple of 4
+      // n must be a multiple of 4
       // bDoRemainder = k & 7 && k > 8
-      -:-:-:-:00 LOP.AND.NZ P4, RZ, k, 7;
+      -:-:-:-:00 LOP.AND k_and, k, 7;
+      -:-:-:-:00 ISETP.EQ P4, RZ, k_and;
       -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, P4;
 
       // doLoad = tidY < k && txa|txb < n|m

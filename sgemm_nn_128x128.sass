@@ -78,7 +78,7 @@
   join('', map sprintf("-:-:-:-:00 LDS.U.128 czero%02d, [RZ + addr_zero];\n", $_ * 4), 0..15);
 </CODE>
 
-// tidAY  = (tid & 1) << 2
+// tidAY = (tid & 1) << 2
 // tidAY = 0, 4
 -:-:-:-:00 LOP.AND tid1,  tid,  1;
 -:-:-:-:00 SHL     tidAY, tid1, 2;
@@ -135,35 +135,42 @@
 // TODO(keren): blkB * 128 + tidBX < param_n
 -:-:-:-:00 ISETP.LT.AND P6, PT, txb, param_n, PT;
 
-// writeAs = 4 * (128 * tidAY + tidAX)
+// writeAs = 4 * (128 * tidAY + tidAX + 128 * 8 * 2)
 // tidAX = 0 : 1 : 128
 // tidAY = 0, 4
-// As
 // ----------------
 // ---------------- tidAY 0, 4
 // ----------------
 // ----------------
+// ---- writeAs
 // tidAX
 -:-:-:-:00 ISCADD writeAs, tidAY, tidAX, 7;
 -:-:-:-:00 ISCADD writeAs, writeAs, 4x<128*8*2>, 2;
 
-// writeBs = (128*tidBY + tidBX) * 4
+// writeBs = (128*tidBY + tidBX + 128 * 8 * 3) * 4
 // tidBX = 0 : 4 : 128
 // tidBY = 0 : 1 : 8
-// Bs
+// ----------------
+// ----------------
+// ---------------- 
 // ---------------- tidBY
-// tidBX
+// ---- writeBs
+// tidBX 
 -:-:-:-:00 ISCADD writeBs, tidBY, tidBX, 7;
 -:-:-:-:00 ISCADD writeBs, writeBs, 4x<128*8*3>, 2;
 
+// (keren): A allocate 128 * 8 elements
 // readAs  = (((tid & 0x70) >> 3) | (tid & 1)) << 4
+// [6][5][4][0] * 4 * 4
+// readAs = 0 : 1 : 64
 -:-:-:-:00 LOP.AND readAs, tid,    0x70;
 -:-:-:-:00 SHR.U32 readAs, readAs, 3;
 -:-:-:-:00 LOP.OR  readAs, readAs, tid1;
 -:-:-:-:00 SHL     readAs, readAs, 4;
 
-// (keren): A allocate 128 * 8 elements
 // readBs = ((tid128 >> 4) | ((tid >> 1) & 7)) << 4 + 4096;
+// [7][3][2][1] * 4 * 4 + 4 * 128 * 8
+// readBs = 0 : 1 : 64
 -:-:-:-:00 LOP.AND tid128, tid,    128;
 -:-:-:-:00 BFE.U32 tid7,   tid,    0x301; // 3 bits at position 1
 -:-:-:-:00 SHR.U32 readBs, tid128, 4;
@@ -175,9 +182,21 @@
 <CODE>
     our $vec;
     return $vec ? q{
-      // k must be multiple of 8
+      // k must be a multiple of 16
+      // n must be a multiple of 4
+      //       -
+      //       -
+      //       -
+      //       -
+      // tidBY --------------- trackB ---- loadB0
+      //            blkB    tidBX
       -:-:-:-:00 @P6 LD.E.CI.128 loadB0, [trackB];
-
+      //       -
+      //       -
+      // blkA  -
+      //       -
+      //       -
+      // tidAX ---- trackA ---- loadA0 -------- loadA4
       -:-:-:-:00 @P5 LD.E.CI.128 loadA0, [trackA + 4x<0>];
       -:-:-:-:00 @P5 LD.E.CI.128 loadA4, [trackA + 4x<8>];
 
@@ -187,11 +206,24 @@
 
       -:-:-:-:00 PSETP.AND.AND P1, PT, PT, PT, PT;
 
+      // ----------------------
+      // ---------------------- 
+      // ---------------------- tidBY
+      // ----- writeBS ---- loadB0
+      // tidBX
       -:-:-:-:00 STS.128 [writeBs], loadB0;
 
       -:-:-:-:00 IADD   trackB0.CC, trackB0, param_ldb8;
       -:-:-:-:00 IADD.X trackB1, trackB1, RZ;
 
+      // ------------------
+      // ------------------ tidAY 0, 4
+      // ------------------
+      // ------ writeAS - loadA0
+      // ---------------- loadA1
+      // ---------------- loadA2
+      // ---------------- loadA3
+      // tidAX
       -:-:-:-:00 STS [writeAs + 4x<0*128>], loadA0;
       -:-:-:-:00 STS [writeAs + 4x<1*128>], loadA1;
       -:-:-:-:00 STS [writeAs + 4x<2*128>], loadA2;
@@ -258,10 +290,14 @@
     };
 </CODE>
 
-// TODO(keren): double buffer?
+// double buffer
+// readAs = readAs + 128 * 8 * 2
+// readBs = readBs + 128 * 8 * 2
 -:-:-:-:00 LOP.XOR readAs, readAs, 4x<128*8*2>;
 -:-:-:-:00 LOP.XOR readBs, readBs, 4x<128*8*2>;
 -:-:-:-:00 BAR.SYNC 0;
+// writeAs = writeAs - 128 * 8 * 2
+// writeBs = writeBs - 128 * 8 * 2
 -:-:-:-:00 LOP.XOR writeAs, writeAs, 4x<128*8*2>;
 -:-:-:-:00 LOP.XOR writeBs, writeBs, 4x<128*8*2>;
 

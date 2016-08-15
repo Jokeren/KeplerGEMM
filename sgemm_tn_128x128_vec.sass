@@ -47,8 +47,8 @@
   104-107 : trackA<0-1>, trackB<0-1>
 
   108-121 ~ writeS, lda8, k, tidY, txa, txb, ta, tb, loop
-  122-127 ~ readAs, readBs, tid
-  128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1
+  122-127 ~ readAs, readBs, tid 
+  128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1, k_and
 
   64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
@@ -132,8 +132,9 @@ REMAINDER:
     $vec = 1;
     return $vec ? q{
       // bDoRemainder = k & 7 && k > 8
-      -:-:-:-:00 LOP.AND.NZ P4, RZ, k, 7;
-      -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, P4;
+      -:-:-:-:00 LOP.AND k_and, k, 7;
+      -:-:-:-:00 ISETP.EQ.AND P1, PT, k_and, RZ, PT;
+      -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, !P1;
 
       // doLoad = tidY < k && txa|txb < n|m
       -:-:-:-:00 ISETP.LT.AND P2, PT, tidY, k, P5;

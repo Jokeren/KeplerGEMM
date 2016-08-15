@@ -127,7 +127,7 @@ REMAINDER:
 <CODE>
     our $vec;
     return $vec ? q{
-      // k must be multiple of 8
+      // k must be a multiple of 16
       -:-:-:-:00 @P5 LD.E.CI.128 loadA0, [trackA + 4x<0>];
       -:-:-:-:00 @P5 LD.E.CI.128 loadA4, [trackA + 4x<8>];
 
