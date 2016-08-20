@@ -158,87 +158,31 @@
 <CODE>
     our $vec;
     $vec = 1;
-    return $vec ? q{
+    return q{
       // k must be multiple of 8
-      -:-:-:-:00 @P6 LD.E.CI.128 loadB0, [trackB];
+      T:-:D:-:00 @P6 LDG.E.CI.128 loadB0, [trackB];
 
-      -:-:-:-:00 @P5 LD.E.CI.128 loadA0, [trackA + 4x<0>];
-      -:-:-:-:00 @P5 LD.E.CI.128 loadA4, [trackA + 4x<8>];
+      T:-:D:-:00 @P5 LDG.E.CI.128 loadA0, [trackA + 4x<0>];
+      T:-:D:-:00 @P5 LDG.E.CI.128 loadA4, [trackA + 4x<8>];
 
-      -:-:-:-:00 @!P6 LDS.U.128 loadB0, [RZ + addr_zero];
-      -:-:-:-:00 @!P5 LDS.U.128 loadA0, [RZ + addr_zero];
-      -:-:-:-:00 @!P5 LDS.U.128 loadA4, [RZ + addr_zero];
+      T:-:D:S:00 @!P6 LDS.U.128 loadB0, [RZ + addr_zero];
+      T:-:D:S:00 @!P5 LDS.U.128 loadA0, [RZ + addr_zero];
+      T:-:D:S:00 @!P5 LDS.U.128 loadA4, [RZ + addr_zero];
 
-      -:-:-:-:00 PSETP.AND.AND P1, PT, PT, PT, PT;
+      T:-:D:-:00 PSETP.AND.AND P1, PT, PT, PT, PT;
 
-      -:-:-:-:00 STS.128 [writeBs], loadB0;
+      -:-:D:S:00 STS.128 [writeBs], loadB0;
 
-      -:-:-:-:00 IADD   trackB0.CC, trackB0, param_ldb8;
-      -:-:-:-:00 IADD.X trackB1, trackB1, RZ;
+      T:-:D:-:00 IADD   trackB0.CC, trackB0, param_ldb8;
+      T:-:D:-:00 IADD.X trackB1, trackB1, RZ;
 
-      -:-:-:-:00 STS [writeAs + 4x<0*128>], loadA0;
-      -:-:-:-:00 STS [writeAs + 4x<1*128>], loadA1;
-      -:-:-:-:00 STS [writeAs + 4x<2*128>], loadA2;
-      -:-:-:-:00 STS [writeAs + 4x<3*128>], loadA3;
+      -:-:D:S:00 STS [writeAs + 4x<0*128>], loadA0;
+      -:-:D:S:00 STS [writeAs + 4x<1*128>], loadA1;
+      -:-:D:S:00 STS [writeAs + 4x<2*128>], loadA2;
+      -:-:D:S:00 STS [writeAs + 4x<3*128>], loadA3;
 
-      -:-:-:-:00 IADD   trackA0.CC, trackA0, 4x<16>;
-      -:-:-:-:00 IADD.X trackA1, trackA1, RZ;
-
-    } : q{
-      // doLoad0 = tidBY < k
-      -:-:-:-:00 IADD x1, txb, 1;
-      -:-:-:-:00 IADD x2, txb, 2;
-      -:-:-:-:00 IADD x3, txb, 3;
-
-      -:-:-:-:00 ISETP.LT.AND P0, PT, tidBY, k, P6;
-      -:-:-:-:00 ISETP.LT.AND P1, PT, x1, param_n, P0;
-      -:-:-:-:00 ISETP.LT.AND P2, PT, x2, param_n, P0;
-      -:-:-:-:00 ISETP.LT.AND P3, PT, x3, param_n, P0;
-
-      -:-:-:-:00 @P0 LD.E.CI loadB0, [trackB + 4x<0>];
-      -:-:-:-:00 @P1 LD.E.CI loadB1, [trackB + 4x<1>];
-      -:-:-:-:00 @P2 LD.E.CI loadB2, [trackB + 4x<2>];
-      -:-:-:-:00 @P3 LD.E.CI loadB3, [trackB + 4x<3>];
-
-      -:-:-:-:00 @!P0 MOV loadB0, RZ;
-      -:-:-:-:00 @!P1 MOV loadB1, RZ;
-      -:-:-:-:00 @!P2 MOV loadB2, RZ;
-      -:-:-:-:00 @!P3 MOV loadB3, RZ;
-
-      -:-:-:-:00 IADD k1, tidAY, 1;
-      -:-:-:-:00 IADD k2, tidAY, 2;
-      -:-:-:-:00 IADD k3, tidAY, 3;
-
-      -:-:-:-:00 ISETP.LT.AND P0, PT, tidAY, k, P5;
-      -:-:-:-:00 ISETP.LT.AND P1, PT, k1, k, P5;
-      -:-:-:-:00 ISETP.LT.AND P2, PT, k2, k, P5;
-      -:-:-:-:00 ISETP.LT.AND P3, PT, k3, k, P5;
-
-      -:-:-:-:00 @P0 LD.E.CI loadA0, [trackA + 4x<0>];
-      -:-:-:-:00 @P1 LD.E.CI loadA1, [trackA + 4x<1>];
-      -:-:-:-:00 @P2 LD.E.CI loadA2, [trackA + 4x<2>];
-      -:-:-:-:00 @P3 LD.E.CI loadA3, [trackA + 4x<3>];
-
-      -:-:-:-:00 @!P0 MOV loadA0, RZ;
-      -:-:-:-:00 @!P1 MOV loadA1, RZ;
-      -:-:-:-:00 @!P2 MOV loadA2, RZ;
-      -:-:-:-:00 @!P3 MOV loadA3, RZ;
-
-      // bDoRemainder = k > 8
-      -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, PT;
-
-      -:-:-:-:00 STS.128 [writeBs], loadB0;
-
-      -:-:-:-:00 IADD   trackB0.CC, trackB0, param_ldb8;
-      -:-:-:-:00 IADD.X trackB1, trackB1, RZ;
-
-      -:-:-:-:00 STS [writeAs + 4x<0*128>], loadA0;
-      -:-:-:-:00 STS [writeAs + 4x<1*128>], loadA1;
-      -:-:-:-:00 STS [writeAs + 4x<2*128>], loadA2;
-      -:-:-:-:00 STS [writeAs + 4x<3*128>], loadA3;
-
-      -:-:-:-:00 IADD   trackA0.CC, trackA0, 4x<8>;
-      -:-:-:-:00 IADD.X trackA1, trackA1, RZ;
+      T:-:D:-:00 IADD   trackA0.CC, trackA0, 4x<16>;
+      T:-:D:-:00 IADD.X trackA1, trackA1, RZ;
     };
 </CODE>
 
@@ -250,70 +194,37 @@
 -:-:-:-:00 LOP.XOR writeBs, writeBs, 4x<128*8*2>;
 
 <CODE>
-    our $vec;
-    $vec = 1;
-    my $k_end = $vec ? 16 : 24;
-    our @top = ("-:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n");
+    my $k_end = 16;
+    our @top = ("T:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n");
     our %insert =
     (
-        ($vec ?
-            (
-              j0c1  => "T:-:-:-:00 PSETP.AND.AND P1, PT, !P1, PT, PT;\n",
-              j0c3  => "T:-:-:-:00 ISETP.GE.AND  P0, PT, k, $k_end, PT;\n",
-              j0c15 => "T:-:-:-:00 PSETP.AND.AND P2, PT, P0, P1, P5;\n",
+        j0c1  => "T:-:-:-:00 PSETP.AND.AND P1, PT, !P1, PT, PT;\n",
+        j0c3  => "T:-:-:-:00 ISETP.GE.AND  P0, PT, k, $k_end, PT;\n",
+        j0c15 => "T:-:-:-:00 PSETP.AND.AND P2, PT, P0, P1, P5;\n",
 
-              j0c10 => "T:-:-:-:00 \@P3 LD.E.CI.128 loadB0, [trackB];\n",
+        j0c10 => "T:-:-:-:00 \@P3 LDG.E.CI.128 loadB0, [trackB];\n",
 
-              j0c28 => "T:-:-:-:00 \@P2 LD.E.CI.128 loadA0, [trackA + 4x<0>];\n",
-              j0c30 => "T:-:-:-:00 \@P2 LD.E.CI.128 loadA4, [trackA + 4x<8>];\n",
+        j0c28 => "T:-:-:-:00 \@P2 LDG.E.CI.128 loadA0, [trackA + 4x<0>];\n",
+        j0c30 => "T:-:-:-:00 \@P2 LDG.E.CI.128 loadA4, [trackA + 4x<8>];\n",
 
-              j4c29 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<0*128>], loadA4;\n",
-              j4c31 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<1*128>], loadA5;\n",
-              j4c33 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<2*128>], loadA6;\n",
-              j4c35 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<3*128>], loadA7;\n",
+        j4c29 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<0*128>], loadA4;\n",
+        j4c31 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<1*128>], loadA5;\n",
+        j4c33 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<2*128>], loadA6;\n",
+        j4c35 => "T:-:D:S:00 \@!P1 STS [writeAs + 4x<3*128>], loadA7;\n",
 
-              j5c35 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
+        j5c35 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
 
-              j6c29 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<0*128>], loadA0;\n",
-              j6c31 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<1*128>], loadA1;\n",
-              j6c33 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<2*128>], loadA2;\n",
-              j6c35 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<3*128>], loadA3;\n",
+        j6c29 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<0*128>], loadA0;\n",
+        j6c31 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<1*128>], loadA1;\n",
+        j6c33 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<2*128>], loadA2;\n",
+        j6c35 => "T:-:D:S:00 \@P1 STS [writeAs + 4x<3*128>], loadA3;\n",
 
-              j6c46 => "T:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<16>;\n",
-              j6c54 => "T:-:-:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
+        j6c46 => "T:-:D:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<16>;\n",
+        j6c54 => "T:-:D:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
 
-              j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n",
-            ) :
-            (
-              j0c1  => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
-              j0c8  => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
-
-              j0c10 => "-:-:-:-:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
-              j0c29 => "-:-:-:-:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
-              j0c31 => "-:-:-:-:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
-              j0c33 => "-:-:-:-:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
-
-              j0c35 => "-:-:-:-:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
-              j1c29 => "-:-:-:-:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
-              j1c31 => "-:-:-:-:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
-              j1c33 => "-:-:-:-:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
-
-              j5c39 => "-:-:-:-:00 \@P0 STS.128 [writeBs], loadB0;\n",
-
-              j6c29 => "-:-:-:-:00 \@P0 STS [writeAs + 4x<0*128>], loadA0;\n",
-              j6c31 => "-:-:-:-:00 \@P0 STS [writeAs + 4x<1*128>], loadA1;\n",
-              j6c33 => "-:-:-:-:00 \@P0 STS [writeAs + 4x<2*128>], loadA2;\n",
-              j6c35 => "-:-:-:-:00 \@P0 STS [writeAs + 4x<3*128>], loadA3;\n",
-
-              j6c46 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<8>;\n",
-              j6c54 => "-:-:-:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
-
-              j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n" .
-                       "-:-:-:-:00 \@P1 BRA.U REMAINDER;\n",
-            )
-        ),
-        j5c46 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
-        j5c54 => "-:-:-:-:00 \@P3 IADD.X trackB1,    trackB1, RZ;\n",
+        j7c63 => "T:-:D:-:00 \@P0 BRA.U LOOP;\n",
+        j5c46 => "T:-:D:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
+        j5c54 => "T:-:D:-:00 \@P3 IADD.X trackB1,    trackB1, RZ;\n",
 
         j6c63 => "-:-:-:-:00 IADD32I k, k, -8;\n" .
                  "-:-:-:-:00 BAR.SYNC 0;\n" .
