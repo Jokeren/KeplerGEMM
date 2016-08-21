@@ -187,19 +187,19 @@
 </CODE>
 
 // instruction align
--:-:D:S:00 NOP;
--:-:D:S:00 NOP;
--:-:D:S:00 NOP;
--:-:D:S:00 NOP;
--:-:D:S:00 NOP;
--:-:D:S:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
 
 // TODO(keren): double buffer?
--:-:D:S:00 LOP.XOR readAs, readAs, 4x<128*8*2>;
--:-:D:S:00 LOP.XOR readBs, readBs, 4x<128*8*2>;
--:-:D:S:00 BAR.SYNC 0;
--:-:D:S:00 LOP.XOR writeAs, writeAs, 4x<128*8*2>;
--:-:D:S:00 LOP.XOR writeBs, writeBs, 4x<128*8*2>;
+-:-:-:-:00 LOP.XOR readAs, readAs, 4x<128*8*2>;
+-:-:-:-:00 LOP.XOR readBs, readBs, 4x<128*8*2>;
+-:-:-:-:00 BAR.SYNC 0;
+-:-:-:-:00 LOP.XOR writeAs, writeAs, 4x<128*8*2>;
+-:-:-:-:00 LOP.XOR writeBs, writeBs, 4x<128*8*2>;
 
 <CODE>
     my $k_end = 16;

@@ -111,17 +111,17 @@ LOOP:
             my $ctrl;
 
             if (!$ins && $c != 0 && ($c - 5) % 6 == 0) {
-              $ins = "-:-:D:S:00 NOP;\n";
+              $ins = "T:-:D:S:00 NOP;\n";
             }
 
             if (!$ins && $c == 63) {
-              $ins = "-:-:D:S:00 NOP;\n -:-:D:S:00 NOP;\n -:-:D:S:00 NOP;\n";
+              $ins = "T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n";
             }
 
-            if ($c % 6 == 0 || $c % 6 == 3 || $c % 6 == 5) {
-              $ctrl   = "-:-:D:-:05";
-            } else {
+            if ($c % 6 == 1 || $c % 6 == 3 || $c % 6 == 5) {
               $ctrl   = "-:-:D:-:04";
+            } else {
+              $ctrl   = "-:-:D:-:05";
             }
 
             # cx 
