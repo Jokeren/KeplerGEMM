@@ -1,9 +1,9 @@
 # sgemm_common_128x128
 
--:-:-:-:00 LDS.U.128 j0Ay0, [readAs + 4x<0*128 + 00>];
--:-:-:-:00 LDS.U.128 j0Bx0, [readBs + 4x<0*128 + 00>];
--:-:-:-:00 LDS.U.128 j0Ay4, [readAs + 4x<0*128 + 64>];
--:-:-:-:00 LDS.U.128 j0Bx4, [readBs + 4x<0*128 + 64>];
+-:-:-:-:00 LDS.128 j0Ay0, [readAs + 4x<0*128 + 00>];
+-:-:-:-:00 LDS.128 j0Bx0, [readBs + 4x<0*128 + 00>];
+-:-:-:-:00 LDS.128 j0Ay4, [readAs + 4x<0*128 + 64>];
+-:-:-:-:00 LDS.128 j0Bx4, [readBs + 4x<0*128 + 64>];
 
 LOOP:
 
@@ -13,78 +13,78 @@ LOOP:
     our %insert;
 
     my @cOrder;
+    my @swirl = ([0,2],[1,2],[1,0],[0,0]);
+    my @y = (0,1,4,5);
 
     # cOrder
 
-    push @cOrder, [0, 0];
-    push @cOrder, [1, 1];
-    push @cOrder, [1, 0];
-    push @cOrder, [0, 1];
-    push @cOrder, [0, 2];
-    push @cOrder, [1, 3];
-    push @cOrder, [1, 2];
-    push @cOrder, [0, 3];
-    push @cOrder, [0, 4];
-    push @cOrder, [1, 5];
-    push @cOrder, [1, 4];
-    push @cOrder, [0, 5];
-    push @cOrder, [0, 6];
-    push @cOrder, [1, 7];
-    push @cOrder, [1, 6];
-    push @cOrder, [0, 7];
-
-    push @cOrder, [2, 0];
-    push @cOrder, [3, 1];
-    push @cOrder, [3, 0];
-    push @cOrder, [2, 1];
-    push @cOrder, [2, 2];
-    push @cOrder, [3, 3];
-    push @cOrder, [3, 2];
-    push @cOrder, [2, 3];
-    push @cOrder, [2, 4];
-    push @cOrder, [3, 5];
-    push @cOrder, [3, 4];
-    push @cOrder, [2, 5];
-    push @cOrder, [2, 6];
-    push @cOrder, [3, 7];
-    push @cOrder, [3, 6];
-    push @cOrder, [2, 7];
-
-    push @cOrder, [4, 0];
-    push @cOrder, [5, 1];
-    push @cOrder, [5, 0];
-    push @cOrder, [4, 1];
-    push @cOrder, [4, 2];
-    push @cOrder, [5, 3];
-    push @cOrder, [5, 2];
-    push @cOrder, [4, 3];
-    push @cOrder, [4, 4];
-    push @cOrder, [5, 5];
-    push @cOrder, [5, 4];
-    push @cOrder, [4, 5];
-    push @cOrder, [4, 6];
-    push @cOrder, [5, 7];
-    push @cOrder, [5, 6];
-    push @cOrder, [4, 7];
-
-    push @cOrder, [6, 0];
-    push @cOrder, [7, 1];
-    push @cOrder, [7, 0];
-    push @cOrder, [6, 1];
-    push @cOrder, [6, 2];
-    push @cOrder, [7, 3];
-    push @cOrder, [7, 2];
-    push @cOrder, [6, 3];
-    push @cOrder, [6, 4];
-    push @cOrder, [7, 5];
-    push @cOrder, [7, 4];
-    push @cOrder, [6, 5];
-    push @cOrder, [6, 6];
-    push @cOrder, [7, 7];
-    push @cOrder, [7, 6];
-    push @cOrder, [6, 7];
+    push  @cOrder, [0,0];
+    push  @cOrder, [0,1];
+    push  @cOrder, [1,1];
+    push  @cOrder, [2,0];
+    push  @cOrder, [1,0];
+    push  @cOrder, [2,1];
+    push  @cOrder, [2,3];
+    push  @cOrder, [2,2];
+    push  @cOrder, [1,2];
+    push  @cOrder, [0,3];
+    push  @cOrder, [1,3];
+    push  @cOrder, [0,2];
+    push  @cOrder, [0,4];
+    push  @cOrder, [0,5];
+    push  @cOrder, [1,5];
+    push  @cOrder, [2,4];
+    push  @cOrder, [1,4];
+    push  @cOrder, [2,5];
+    push  @cOrder, [2,7];
+    push  @cOrder, [2,6];
+    push  @cOrder, [1,6];
+    push  @cOrder, [0,7];
+    push  @cOrder, [1,7];
+    push  @cOrder, [0,6];
+    push  @cOrder, [3,6];
+    push  @cOrder, [3,7];
+    push  @cOrder, [4,7];
+    push  @cOrder, [5,6];
+    push  @cOrder, [4,6];
+    push  @cOrder, [5,7];
+    push  @cOrder, [5,5];
+    push  @cOrder, [5,4];
+    push  @cOrder, [4,4];
+    push  @cOrder, [3,5];
+    push  @cOrder, [4,5];
+    push  @cOrder, [3,4];
+    push  @cOrder, [3,2];
+    push  @cOrder, [3,3];
+    push  @cOrder, [4,3];
+    push  @cOrder, [5,2];
+    push  @cOrder, [4,2];
+    push  @cOrder, [5,3];
+    push  @cOrder, [5,1];
+    push  @cOrder, [5,0];
+    push  @cOrder, [4,0];
+    push  @cOrder, [3,1];
+    push  @cOrder, [4,1];
+    push  @cOrder, [3,0];
+    push  @cOrder, [6,0];
+    push  @cOrder, [7,0];
+    push  @cOrder, [7,1];
+    push  @cOrder, [6,2];
+    push  @cOrder, [6,1];
+    push  @cOrder, [7,2];
+    push  @cOrder, [7,5];
+    push  @cOrder, [6,5];
+    push  @cOrder, [6,4];
+    push  @cOrder, [7,3];
+    push  @cOrder, [7,4];
+    push  @cOrder, [6,3];
+    push  @cOrder, [6,6];
+    push  @cOrder, [6,7];
+    push  @cOrder, [7,7];
+    push  @cOrder, [7,6]; 
 
     my $out = join '', @top;
+    my $loopc = 0;
 
     foreach my $j (0 .. 7)
     {
@@ -157,6 +157,7 @@ LOOP:
             # [0, 3]; [0, 3]; [0, 1]; [0, 1]; [0, 2]; [0, 2]; [0, 0]; [0, 0];
 
             $out .= sprintf "%s FFMA cx%dy%d, j%dBx%d, j%dAy%d, cx%dy%d;\n%s", $ctrl, $x, $y, $odd, $x, $odd, $y, $x, $y, $ins;
+            $loopc = $loopc + 1;
         }
     }
     return $out;
