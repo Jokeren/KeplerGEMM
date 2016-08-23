@@ -219,27 +219,21 @@
                  "T:-:D:S:00 NOP;\n",
 
         j2c53 => "-:-:D:S:00 \@!P1 STS [writeAs + 4x<0*128>], loadA4;\n",
-        j2c63 => "-:-:D:S:00 \@!P1 STS [writeAs + 4x<1*128>], loadA5;\n".
-                 "T:-:D:S:00 NOP;\n".
-                 "T:-:D:S:00 NOP;\n",
+        j2c59 => "-:-:D:S:00 \@!P1 STS [writeAs + 4x<1*128>], loadA5;\n",
 
         j3c53 => "-:-:D:S:00 \@!P1 STS [writeAs + 4x<2*128>], loadA6;\n",
         j3c59 => "-:-:D:S:00 \@!P1 STS [writeAs + 4x<3*128>], loadA7;\n",
-        j3c63 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<0*128>], loadA0;\n".
-                 "T:-:D:S:00 NOP;\n".
-                 "T:-:D:S:00 NOP;\n",
-                 
 
-        j4c53 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<1*128>], loadA1;\n",
-        j4c59 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<2*128>], loadA2;\n",
-        j4c63 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<3*128>], loadA3;\n".
-                 "T:-:D:S:00 NOP;\n".
-                 "T:-:D:S:00 NOP;\n",
+        j4c53 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<0*128>], loadA0;\n",
+        j4c59 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<1*128>], loadA1;\n",
 
-        j5c53 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
+        j5c53 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<2*128>], loadA2;\n",
+        j5c59 => "-:-:D:S:00 \@P1 STS [writeAs + 4x<3*128>], loadA3;\n",
         j5c63 => "T:-:D:S:05 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n".
                  "T:-:D:S:04 \@P3 IADD.X trackB1,    trackB1, RZ;\n".
                  "T:-:D:S:00 NOP;\n",
+
+        j6c53 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
 
         j6c63 => "T:-:D:-:00 IADD32I k, k, -8;\n" .
                  "T:-:D:S:00 BAR.SYNC 0;\n" .
