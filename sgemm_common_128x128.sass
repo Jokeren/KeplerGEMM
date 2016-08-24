@@ -115,17 +115,37 @@ LOOP:
             my $ctrl;
 
             if (!$ins && $c != 0 && ($c - 5) % 6 == 0) {
-              $ins = "T:-:D:S:00 NOP;\n";
+              $ins = "-:G:D:-:00 NOP;\n";
             }
 
-            if (!$ins && $c == 63) {
-              $ins = "T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n";
+            #if (!$ins && $c == 63) {
+            #  $ins = "-:G:D:-:00 NOP;\n T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n";
+            #}
+
+            #if ($c % 6 == 1 || $c % 6 == 3 || $c % 6 == 5) {
+            #  $ctrl   = "-:-:D:-:04";
+            #} else {
+            #  $ctrl   = "-:-:D:-:05";
+            #}
+
+            if(($c - 5) % 6 ==0 || $c > 60){
+              if($ins){
+              }
+              else{
+                $ins = "-:G:D:-:00 NOP;\n";
+              }
             }
 
-            if ($c % 6 == 1 || $c % 6 == 3 || $c % 6 == 5) {
-              $ctrl   = "-:-:D:-:04";
-            } else {
-              $ctrl   = "-:-:D:-:05";
+            if($ins){
+              $ctrl = "-:-:D:-:04";
+            }
+            else{
+              if(($c - 1) % 6 == 0 || ($c - 3) % 6 == 0){
+                $ctrl = "-:-:D:-:04";
+              }
+              else{
+                $ctrl = "-:-:D:-:05";
+              }
             }
 
             # cx 
@@ -308,11 +328,10 @@ STORE_C:
 -:-:-:-:00 LDS c2, [readCs + 4x<1*128 + 00>];
 -:-:-:-:00 LDS c3, [readCs + 4x<1*128 + 64>];
 
-T:-:-:S:00 TEXDEPBAR 0x0;
-T:-:-:-:00 @P6 FFMA c0, d0, beta, c0;
-T:-:-:-:00 @P6 FFMA c1, d1, beta, c1;
-T:-:-:-:00 @P6 FFMA c2, d2, beta, c2;
-T:-:-:-:00 @P6 FFMA c3, d3, beta, c3;
+-:-:-:-:00 @P6 FFMA c0, d0, beta, c0;
+-:-:-:-:00 @P6 FFMA c1, d1, beta, c1;
+-:-:-:-:00 @P6 FFMA c2, d2, beta, c2;
+-:-:-:-:00 @P6 FFMA c3, d3, beta, c3;
 
 -:-:-:-:00 ISETP.LT.AND P4, PT, cx00, param_n, P6;
 -:-:-:-:00 ISETP.LT.AND P5, PT, cx64, param_n, P6;
@@ -356,11 +375,10 @@ T:-:-:-:00 @P6 FFMA c3, d3, beta, c3;
 -:-:-:-:00 LDS c2, [readCs + 4x<3*128 + 00>];
 -:-:-:-:00 LDS c3, [readCs + 4x<3*128 + 64>];
 
-T:-:-:-:00 TEXDEPBAR 0x0;
-T:-:-:-:00 @P6 FFMA c0, d0, beta, c0;
-T:-:-:-:00 @P6 FFMA c1, d1, beta, c1;
-T:-:-:-:00 @P6 FFMA c2, d2, beta, c2;
-T:-:-:-:00 @P6 FFMA c3, d3, beta, c3;
+-:-:-:-:00 @P6 FFMA c0, d0, beta, c0;
+-:-:-:-:00 @P6 FFMA c1, d1, beta, c1;
+-:-:-:-:00 @P6 FFMA c2, d2, beta, c2;
+-:-:-:-:00 @P6 FFMA c3, d3, beta, c3;
 
 -:-:-:-:00 @P0 ST.E.CG [C08y0 + 4x<00>], c0;
 -:-:-:-:00 @P1 ST.E.CG [C08y0 + 4x<64>], c1;

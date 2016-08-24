@@ -6,7 +6,7 @@ TEMPLATES := $(addsuffix _template.cubin, $(BINS))
 all: $(BINS)
 
 $(BINS):
-	nvcc -arch sm_35 -m 64 $@.cu -cubin -o $@_template.cubin
+	nvcc -arch sm_35 -m 64 $@.cu -cubin -O3 -o $@_template.cubin
 	KeplerAs.pl -i $@.sass $@_template.cubin $@.cubin
 
 clean:
