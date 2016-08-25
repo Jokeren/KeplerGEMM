@@ -101,10 +101,10 @@ LOOP:
         $insert{"j${j}c11"} = sprintf "T:-:D:S:00 %s LDS.64 j%dAy2, [readAs + 4x<%d*128 + 2>];\n", $rsPred, $nOdd, $rsOffset;
         $insert{"j${j}c17"} = sprintf "T:-:D:S:00 %s LDS.64 j%dAy4, [readAs + 4x<%d*128 + 64>];\n", $rsPred, $nOdd, $rsOffset;
         $insert{"j${j}c23"} = sprintf "T:-:D:S:00 %s LDS.64 j%dAy6, [readAs + 4x<%d*128 + 66>];\n", $rsPred, $nOdd, $rsOffset;
-        $insert{"j${j}c29"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx0, [readBs + 4x<%d*128 + 00>];\n", $rsPred, $nOdd, $rsOffset;
-        $insert{"j${j}c35"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx2, [readBs + 4x<%d*128 + 2>];\n", $rsPred, $nOdd, $rsOffset;
-        $insert{"j${j}c41"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx4, [readBs + 4x<%d*128 + 64>];\n", $rsPred, $nOdd, $rsOffset;
-        $insert{"j${j}c47"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx6, [readBs + 4x<%d*128 + 66>];\n", $rsPred, $nOdd, $rsOffset;
+        $insert{"j${j}c35"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx0, [readBs + 4x<%d*128 + 00>];\n", $rsPred, $nOdd, $rsOffset;
+        $insert{"j${j}c41"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx2, [readBs + 4x<%d*128 + 2>];\n", $rsPred, $nOdd, $rsOffset;
+        $insert{"j${j}c47"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx4, [readBs + 4x<%d*128 + 64>];\n", $rsPred, $nOdd, $rsOffset;
+        $insert{"j${j}c59"} = sprintf "T:-:D:S:00 %s LDS.64 j%dBx6, [readBs + 4x<%d*128 + 66>];\n", $rsPred, $nOdd, $rsOffset;
 
         foreach my $c (0 .. 63)
         {
@@ -114,9 +114,9 @@ LOOP:
 
             my $ctrl;
 
-            if (!$ins && $c != 0 && ($c - 5) % 6 == 0) {
-              $ins = "-:G:D:-:00 NOP;\n";
-            }
+            #if (!$ins && $c != 0 && ($c - 5) % 6 == 0) {
+            #  $ins = "-:G:D:-:00 NOP;\n";
+            #}
 
             #if (!$ins && $c == 63) {
             #  $ins = "-:G:D:-:00 NOP;\n T:-:D:S:00 NOP;\n T:-:D:S:00 NOP;\n";
@@ -132,7 +132,7 @@ LOOP:
               if($ins){
               }
               else{
-                $ins = "-:G:D:-:00 NOP;\n";
+                $ins = "T:-:D:S:00 NOP;\n";
               }
             }
 
