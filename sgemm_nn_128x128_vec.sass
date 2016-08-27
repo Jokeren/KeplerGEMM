@@ -140,6 +140,10 @@
 -:-:-:-:00 LOP.OR  readBs, readBs, tid7;
 -:-:-:-:00 ISCADD  readBs, readBs, 4x<128*8>, 4;
 
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+-:-:-:-:00 NOP;
+
   REMAINDER:
 
 <CODE>
@@ -194,8 +198,6 @@
       -:-:-:-:00 IADD.X trackA1, trackA1, RZ;
     };
 </CODE>
-
--:-:-:-:00 NOP;
 
 // TODO(keren): double buffer?
 -:-:-:-:00 LOP.XOR readAs, readAs, 4x<128*8*2>;

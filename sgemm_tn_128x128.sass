@@ -36,16 +36,7 @@
   13,  8, 29, 24, 45, 40, 61, 56 : cx<0-7>y5
   11, 14, 27, 30, 43, 46, 59, 62 : cx<0-7>y6
   15, 10, 31, 26, 47, 42, 63, 58 : cx<0-7>y7
- //  3, 2,11,10,19,18,27,26 : cx<0-7>y0
- //  7, 6,15,14,23,22,31,30 : cx<0-7>y1
- //  1, 0, 9, 8,17,16,25,24 : cx<0-7>y2
- //  5, 4,13,12,21,20,29,28 : cx<0-7>y3
- // 35,34,43,42,51,50,59,58 : cx<0-7>y4
- // 39,38,47,46,55,54,63,62 : cx<0-7>y5
- // 33,32,41,40,49,48,57,56 : cx<0-7>y6
- // 37,36,45,44,53,52,61,60 : cx<0-7>y7
 
-  64-95 ~ x<1-3>, y<1-3>
 
   64-67 : j0Ay<0-3>
   68-71 : j0Bx<0-3>
@@ -55,8 +46,6 @@
   84-87 : j1Bx<0-3>
   88-91 : j1Ay<4-7>
   92-95 : j1Bx<4-7>
- // 64-79 : j0Ay<0-7>, j0Bx<0-7>
- // 80-95 : j1Ay<0-7>, j1Bx<0-7>
 
   96-103 : loadA<0-3>, loadB<0-3>
 
@@ -65,6 +54,7 @@
   108-121 ~ writeS, lda8, k, tidY, txa, txb, ta, tb, loop
   122-127 ~ readAs, readBs, tid
   128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1
+  144-155 ~ x<1-3>, y<1-3>
 
   64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
@@ -144,27 +134,7 @@
 REMAINDER:
 
 <CODE>
-    our $vec;
-    return $vec ? q{
-      // m must be a multiple of 4
-      // n must be a multiple of 4
-      // bDoRemainder = k & 7 && k > 8
-      -:-:-:-:00 LOP.AND k_and, k, 7;
-      -:-:-:-:00 ISETP.EQ P4, RZ, k_and;
-      -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, P4;
-
-      // doLoad = tidY < k && txa|txb < n|m
-      -:-:-:-:00 ISETP.LT.AND P2, PT, tidY, k, P5;
-      -:-:-:-:00 ISETP.LT.AND P3, PT, tidY, k, P6;
-
-      -:-:-:-:00 @P2 LD.E.CI.128 loadA, [trackA];
-      -:-:-:-:00 @P3 LD.E.CI.128 loadB, [trackB];
-
-      -:-:-:-:00 @!P2 LDS.U.128 loadA, [addr_zero];
-      -:-:-:-:00 @!P3 LDS.U.128 loadB, [addr_zero];
-
-      // Vec 4 and scalar loads
-    } : q{
+    return q{
       // doLoadA = tidY < k && txa < m
       // doLoadB = tidY < k && txb < n
       -:-:-:-:00 IADD x1, txa, 1;
@@ -224,32 +194,22 @@ REMAINDER:
 -:-:-:-:00 IADD.X trackB1, trackB1, RZ;
 
 <CODE>
-    our $vec;
-    my $k_end = $vec ? 16 : 24;
-    our @top = ("-:-:-:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n");
-
+    my $k_end = 24;
     our %insert =
     (
-        j0c1  => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
-        j0c8  => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
+        j0c0 => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
+        j0c1 => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
+        j0c8 => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
 
-        ($vec ?
-            (
-              j0c10 => "-:-:-:-:00 \@P2 LD.E.CI.128 loadA, [trackA];\n",
-              j0c13 => "-:-:-:-:00 \@P3 LD.E.CI.128 loadB, [trackB];\n",
-            ) :
-            (
-              j0c10 => "-:-:-:-:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
-              j0c29 => "-:-:-:-:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
-              j0c31 => "-:-:-:-:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
-              j0c33 => "-:-:-:-:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
+        j0c10 => "-:-:-:-:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
+        j0c29 => "-:-:-:-:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
+        j0c31 => "-:-:-:-:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
+        j0c33 => "-:-:-:-:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
 
-              j0c35 => "-:-:-:-:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
-              j1c29 => "-:-:-:-:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
-              j1c31 => "-:-:-:-:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
-              j1c33 => "-:-:-:-:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
-            )
-        ),
+        j0c35 => "-:-:-:-:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
+        j1c29 => "-:-:-:-:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
+        j1c31 => "-:-:-:-:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
+        j1c33 => "-:-:-:-:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
 
         j5c33 => "-:-:-:-:00 \@P0 STS.128 [writeS + 4x<0*128>], loadA0;\n",
 
