@@ -271,15 +271,15 @@
         j0c61 => "T:-:D:S:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
 
         # cannot use LDG because of the offset
-        j1c53 => "T:-:D:S:00 \@P3 LDG.E.CI loadB0, [trackB + 4x<0>];\n",
-        j1c61 => "T:-:D:S:00 \@P3 LDG.E.CI loadB1, [trackB + 4x<1>];\n",
-        j1c62 => "T:-:D:S:00 \@P3 LDG.E.CI loadB2, [trackB + 4x<2>];\n",
-        j1c63 => "T:-:D:S:00 \@P3 LDG.E.CI loadB3, [trackB + 4x<3>];\n",
+        j1c53 => "T:-:D:S:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
+        j1c61 => "T:-:D:S:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
+        j1c62 => "T:-:D:S:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
+        j1c63 => "T:-:D:S:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
 
-        j2c53 => "T:-:D:S:00 \@P2 LDG.E.CI loadA0, [trackA + 4x<0>];\n",
-        j2c61 => "T:-:D:S:00 \@P2 LDG.E.CI loadA1, [trackA + 4x<1>];\n",
-        j2c62 => "T:-:D:S:00 \@P2 LDG.E.CI loadA2, [trackA + 4x<2>];\n",
-        j2c63 => "T:-:D:S:00 \@P2 LDG.E.CI loadA3, [trackA + 4x<3>];\n",
+        j2c53 => "T:-:D:S:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
+        j2c61 => "T:-:D:S:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
+        j2c62 => "T:-:D:S:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
+        j2c63 => "T:-:D:S:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
 
         j4c53 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
         j4c61 => "T:-:D:S:00 IADD32I k, k, -8;\n",
