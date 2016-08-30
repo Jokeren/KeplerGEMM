@@ -51,8 +51,10 @@
   104-107 : trackA<0-1>, trackB<0-1>
 
   108-121 ~ writeS, lda8, k, tidY, txa, txb, ta, tb, loop
-  122-127 ~ readAs, readBs, tid 
   128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1, k_and
+  132 ~ readAs
+  133 ~ readBs
+  134 ~ tid
 
   64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
@@ -178,29 +180,29 @@ REMAINDER:
     my $k_end = 16;
     our %insert =
     (
-        j0c29 => "-:-:D:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
+        j0c47 => "-:-:D:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
         j0c53 => "-:-:D:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
         j0c61 => "-:G:D:-:07 \@P2 LDG.E.128 loadA, [trackA];\n",
         j0c62 => "-:G:D:-:07 \@P3 LDG.E.128 loadB, [trackB];\n",
 
-        j1c29 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, param_lda8;\n",
+        j1c47 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, param_lda8;\n",
         j1c53 => "-:-:-:-:00 \@P2 IADD.X trackA1, trackA1, RZ;\n",
 
-        j2c29 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
+        j2c47 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
         j2c53 => "-:-:-:-:00 \@P3 IADD.X trackB1, trackB1, RZ;\n",
 
-        j3c61 => "-:-:D:-:05 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
-        j3c63 => "-:-:-:-:00 IADD32I k, k, -8;\n",
+        j3c47 => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
+        j3c53 => "-:-:-:-:00 IADD32I k, k, -8;\n",
 
         j5c63 => "T:-:D:S:00 TEXDEPBAR 0x0;\n",
-        j6c29 => "-:-:D:S:02 \@P0 STS.128 [writeS + 4x<0*128>], loadA0;\n",
+        j6c47 => "-:-:D:S:02 \@P0 STS.128 [writeS + 4x<0*128>], loadA0;\n",
         j6c53 => "-:-:D:S:02 \@P0 STS.128 [writeS + 4x<8*128>], loadB0;\n",
 
         j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
         j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
         j6c63 => "T:-:D:S:00 \@P0 BAR.SYNC 0;\n",
                  
-        j7c61 => "-:-:D:-:05 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
+        j7c47 => "-:-:-:-:00 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
         j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n" .
                  "-:-:-:-:00 \@P1 BRA.U REMAINDER;\n",
     );
