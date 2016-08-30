@@ -172,18 +172,18 @@ REMAINDER:
       -:-:-:-:00 LOP.AND k_and, k, 7;
       -:-:-:-:00 ISETP.EQ.AND P1, PT, k_and, RZ, PT;
 
-      -:-:-:-:00 STS [writeS + 4x<0*128>], loadA0;
-      -:-:-:-:00 STS [writeS + 4x<1*128>], loadA1;
-      -:-:-:-:00 STS [writeS + 4x<2*128>], loadA2;
-      -:-:-:-:00 STS [writeS + 4x<3*128>], loadA3;
+      -:G:-:-:15 STS [writeS + 4x<0*128>], loadA0;
+      -:G:-:-:15 STS [writeS + 4x<1*128>], loadA1;
+      -:G:-:-:15 STS [writeS + 4x<2*128>], loadA2;
+      -:G:-:-:15 STS [writeS + 4x<3*128>], loadA3;
+
+      -:G:-:-:15 STS [writeS + 4x< 8*128>], loadB0;
+      -:G:-:-:15 STS [writeS + 4x< 9*128>], loadB1;
+      -:G:-:-:15 STS [writeS + 4x<10*128>], loadB2;
+      -:G:-:-:15 STS [writeS + 4x<11*128>], loadB3;
 
       -:-:-:-:00 IADD   trackA0.CC, trackA0, 4x<8>;
       -:-:-:-:00 IADD.X trackA1, trackA1, RZ;
-
-      -:-:-:-:00 STS [writeS + 4x< 8*128>], loadB0;
-      -:-:-:-:00 STS [writeS + 4x< 9*128>], loadB1;
-      -:-:-:-:00 STS [writeS + 4x<10*128>], loadB2;
-      -:-:-:-:00 STS [writeS + 4x<11*128>], loadB3;
 
       -:-:-:-:00 IADD   trackB0.CC, trackB0, 4x<8>;
       -:-:-:-:00 IADD.X trackB1, trackB1, RZ;
@@ -200,45 +200,45 @@ REMAINDER:
 <CODE>
     our %insert =
     (
-        j0c29 => "T:-:D:S:00 ISETP.GE.AND P2, PT, k, 16, P5;\n",
-        j0c53 => "T:-:D:S:00 ISETP.GE.AND P3, PT, k, 16, P6;\n",
-        j0c61 => "T:-:D:S:00 ISETP.GE.AND P0, PT, k, 16, PT;\n",
-        j0c62 => "T:-:D:S:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
+        j0c47 => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, 16, P5;\n",
+        j0c53 => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, 16, P6;\n",
+        j0c61 => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, 16, PT;\n",
+        j0c62 => "-:-:-:-:00 \@P2 LD.E.CI loadA0, [trackA + 4x<0>];\n",
 
-        j1c29 => "T:-:D:S:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
-        j1c53 => "T:-:D:S:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
-        j1c61 => "T:-:D:S:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
-        j1c62 => "T:-:D:S:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
+        j1c47 => "-:-:-:-:00 \@P2 LD.E.CI loadA1, [trackA + 4x<1>];\n",
+        j1c53 => "-:-:-:-:00 \@P2 LD.E.CI loadA2, [trackA + 4x<2>];\n",
+        j1c61 => "-:-:-:-:00 \@P2 LD.E.CI loadA3, [trackA + 4x<3>];\n",
+        j1c62 => "-:-:-:-:00 \@P3 LD.E.CI loadB0, [trackB + 4x<0>];\n",
 
-        j2c29 => "T:-:D:S:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
-        j2c53 => "T:-:D:S:00 IADD32I k, k, -8;\n",
-        j2c61 => "T:-:D:S:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
-        j2c62 => "T:-:D:S:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
+        j2c47 => "-:-:-:-:00 \@P3 LD.E.CI loadB1, [trackB + 4x<1>];\n",
+        j2c53 => "-:-:-:-:00 IADD32I k, k, -8;\n",
+        j2c61 => "-:-:-:-:00 \@P3 LD.E.CI loadB2, [trackB + 4x<2>];\n",
+        j2c62 => "-:-:-:-:00 \@P3 LD.E.CI loadB3, [trackB + 4x<3>];\n",
 
-        j3c29 => "T:-:D:S:00 \@P2 IADD   trackA0.CC, trackA0, 4x<8>;\n",
-        j3c53 => "T:-:D:S:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
+        j3c47 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<8>;\n",
+        j3c53 => "-:-:-:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
 
-        j4c29 => "-:-:D:S:00 \@P0 STS [writeS + 4x<0*128>], loadA0;\n",
-        j4c53 => "-:-:D:S:00 \@P0 STS [writeS + 4x<1*128>], loadA1;\n",
-        j4c61 => "-:-:D:S:00 \@P0 STS [writeS + 4x<2*128>], loadA2;\n",
-        j4c62 => "-:-:D:S:00 \@P0 STS [writeS + 4x<3*128>], loadA3;\n",
+        j4c47 => "-:-:D:S:02 \@P0 STS [writeS + 4x<0*128>], loadA0;\n",
+        j4c53 => "-:-:D:S:02 \@P0 STS [writeS + 4x<1*128>], loadA1;\n",
+        j4c61 => "-:-:D:-:07 \@P0 STS [writeS + 4x<2*128>], loadA2;\n",
+        j4c62 => "-:-:D:-:07 \@P0 STS [writeS + 4x<3*128>], loadA3;\n",
 
-        j5c29 => "-:-:D:S:00 \@P0 STS [writeS + 4x< 8*128>], loadB0;\n",
-        j5c53 => "-:-:D:S:00 \@P0 STS [writeS + 4x< 9*128>], loadB1;\n",
-        j5c61 => "-:-:D:S:00 \@P0 STS [writeS + 4x<10*128>], loadB2;\n",
-        j5c62 => "-:-:D:S:00 \@P0 STS [writeS + 4x<11*128>], loadB3;\n",
+        j5c47 => "-:-:D:S:02 \@P0 STS [writeS + 4x< 8*128>], loadB0;\n",
+        j5c53 => "-:-:D:S:02 \@P0 STS [writeS + 4x< 9*128>], loadB1;\n",
+        j5c61 => "-:-:D:-:07 \@P0 STS [writeS + 4x<10*128>], loadB2;\n",
+        j5c62 => "-:-:D:-:07 \@P0 STS [writeS + 4x<11*128>], loadB3;\n",
 
-        j6c29 => "T:-:D:S:00 \@P3 IADD   trackB0.CC, trackB0, 4x<8>;\n",
-        j6c53 => "T:-:D:S:00 \@P3 IADD.X trackB1,    trackB1, RZ;\n",
+        j6c47 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, 4x<8>;\n",
+        j6c53 => "-:-:-:-:00 \@P3 IADD.X trackB1,    trackB1, RZ;\n",
 
-        j6c61 => "T:-:D:S:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
-        j6c62 => "T:-:D:S:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
+        j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
+        j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
         j6c63 => "T:-:D:S:00 \@P0 BAR.SYNC 0;\n",
 
-        j7c29 => "T:-:D:-:00 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
+        j7c47 => "-:-:-:-:00 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
 
-        j7c63 => "T:-:D:-:00 \@P0 BRA.U LOOP;\n".
-                 "T:-:D:-:00 \@P1 BRA.U REMAINDER;\n",
+        j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n".
+                 "-:-:-:-:00 \@P1 BRA.U REMAINDER;\n",
     );
     return;
 </CODE>
