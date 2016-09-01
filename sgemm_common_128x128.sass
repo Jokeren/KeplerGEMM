@@ -1,5 +1,15 @@
 # sgemm_common_128x128
 
+////////////////////////////////////////////
+// debug
+//-:-:-:-:00 MOV tmp_param0, param_C[0];
+//-:-:-:-:00 MOV tmp_param1, param_C[1];
+//
+//-:-:-:-:00 MOV32I k, 0x3f8ccccd;
+//-:-:-:-:00 ST.E [tmp_param0], k;
+//-:-:-:-:00 EXIT;
+/////////////////////////////////////////
+
 -:-:-:-:00 LDS.128 j0Ay0, [readAs + 4x<0*128 + 00>];
 -:-:-:-:00 LDS.128 j0Bx0, [readBs + 4x<0*128 + 00>];
 -:-:-:-:00 LDS.128 j0Ay4, [readAs + 4x<0*128 + 64>];
@@ -183,6 +193,7 @@ LOOP:
     return $out;
 
 </CODE>
+
 
 -:-:-:-:00 S2R blockA, SR_CTAID.Y;
 -:-:-:-:00 S2R blockB, SR_CTAID.Z;

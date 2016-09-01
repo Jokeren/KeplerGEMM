@@ -151,8 +151,8 @@ REMAINDER:
 
       -:-:-:-:00 @P6 LDG.E.CI.128 loadB0, [trackB + 4x<0>];
 
-      -:-:-:-:00 @!P5 LDS.128 loadA0, [addr_zero];
-      -:-:-:-:00 @!P6 LDS.128 loadB0, [addr_zero];
+      -:-:-:-:00 @!P5 LDS.128 loadA0, [RZ + addr_zero];
+      -:-:-:-:00 @!P6 LDS.128 loadB0, [RZ + addr_zero];
 
       -:-:-:-:00 PSETP.AND.AND P1, PT, PT, PT, PT;
 

@@ -51,10 +51,12 @@
   104-107 : trackA<0-1>, trackB<0-1>
 
   108-121 ~ writeS, lda8, k, tidY, txa, txb, ta, tb, loop
-  128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1, k_and
+  128-135 ~ tmp_data, tmp_shl, k_and
+  136-137 : tmp_param<0-1>
   132 ~ readAs
   133 ~ readBs
   134 ~ tid
+  136 ~ mytmp
 
   64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
@@ -150,11 +152,11 @@ REMAINDER:
       -:-:-:-:00 ISETP.LT.AND P2, PT, tidY, k, P5;
       -:-:-:-:00 ISETP.LT.AND P3, PT, tidY, k, P6;
 
-      -:-:-:-:00 @P2 LD.E.CI.128 loadA, [trackA];
-      -:-:-:-:00 @P3 LD.E.CI.128 loadB, [trackB];
+      -:-:-:-:00 @P2 LD.E.CI.128 loadA0, [trackA];
+      -:-:-:-:00 @P3 LD.E.CI.128 loadB0, [trackB];
 
-      -:-:-:-:00 @!P2 LDS.U.128 loadA, [addr_zero];
-      -:-:-:-:00 @!P3 LDS.U.128 loadB, [addr_zero];
+      -:-:-:-:00 @!P2 LDS.128 loadA0, [RZ + addr_zero];
+      -:-:-:-:00 @!P3 LDS.128 loadB0, [RZ + addr_zero];
       // Vec 4 and scalar loads
     };
 
