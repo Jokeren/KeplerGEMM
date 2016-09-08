@@ -23,7 +23,8 @@
 </CONSTANT_MAPPING>
 
 <REGISTER_MAPPING>
-  64-95 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid2, tid7, txa, xmad_ta, xmad_tb, tid31, tid128
+  64-91 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid2, tid7, txa, txb, xmad_ta, xmad_tb, tid31, tid128, tidAY, tidBY, ta, tb, tmp_shl
+  92-93 ~ tmp_param0, tmp_param1
 
   0-63 : czero<00-63>
 
@@ -51,17 +52,16 @@
 
   104-107 : trackA<0-1>, trackB<0-1>
 
-  112-121 ~ writeAs, writeBs, txb, tidAY, tidBY, ta, tb, k, loop
-  128-135 ~ tmp_data, tmp_shl, tmp_param0, tmp_param1
+  108-110 ~ writeAs, writeBs, k
   // to avoid lds bank conflict with ffma 
-  132 ~ readAs
-  133 ~ readBs
-  134 ~ tid
+  117 ~ readAs
+  116 ~ readBs
+  115 ~ tid
 
   64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
   76-85 : C00y<0-1>, C04y<0-1>, C08y<0-1>, C12y<0-1>
-  86-121 ~ ldc1, ldc4, ldc60, ldcz, writeCs, readCs, cx<00|64>, cy<00|04|08|12>, alpha, beta, flags
+  86-101 ~ ldc1, ldc4, ldc60, ldcz, writeCs, readCs, cx<00|64>, cy<00|04|08|12>, alpha, beta, flags
 
 </REGISTER_MAPPING>
 
@@ -224,25 +224,25 @@
         j0c62 => "-:G:D:-:07 \@P2 LDG.E.CI.128 loadA0, [trackA];\n",
 
         j1c47 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<8>;\n",
-        j1c53 => "-:-:-:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
+        j1c53 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
 
-        j2c47 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
+        j2c47 => "-:-:-:-:00 \@P2 IADD.X trackA1,    trackA1, RZ;\n",
         j2c53 => "-:-:-:-:00 \@P3 IADD.X trackB1,    trackB1, RZ;\n",
 
         j3c47 => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, $k_end, PT;\n",
         j3c53 => "-:-:-:-:00 IADD32I k, k, -8;\n",
 
-        j6c53 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
-        j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
-        j6c62 => "-:G:D:-:07 NOP;\n",
-        j6c63 => "T:-:D:S:00 TEXDEPBAR 0x0;\n". 
-                 "-:-:D:S:02 \@P0 STS.128 [writeBs], loadB0;\n".
-                 "-:-:D:-:07 NOP;\n".
-                 "-:G:-:-:10 \@P0 STS [writeAs + 4x<0*128>], loadA0;\n".
-                 "-:G:-:-:10 \@P0 STS [writeAs + 4x<1*128>], loadA1;\n".
-                 "-:G:-:-:10 \@P0 STS [writeAs + 4x<2*128>], loadA2;\n".
-                 "-:G:-:-:10 \@P0 STS [writeAs + 4x<3*128>], loadA3;\n".
-                 "T:-:D:S:00 BAR.SYNC 0x0;\n",
+        j5c47 => "T:-:D:S:00 TEXDEPBAR 0x0;\n", 
+        j5c53 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
+        j5c61 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<0*128>], loadA0;\n",
+        j5c62 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<1*128>], loadA1;\n",
+
+        j6c47 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<2*128>], loadA2;\n",
+        j6c53 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<3*128>], loadA3;\n",
+
+        j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
+        j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
+        j6c63 => "T:-:D:S:00 BAR.SYNC 0x0;\n",
 
         j7c47 => "-:-:-:-:00 \@P0 LOP.XOR writeAs, writeAs, 4x<128*8*2>;\n",
         j7c53 => "-:-:-:-:00 \@P0 LOP.XOR writeBs, writeBs, 4x<128*8*2>;\n",
