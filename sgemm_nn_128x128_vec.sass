@@ -218,10 +218,10 @@
     our %insert =
     (
         # P0 must be the topest
-        j0c47 => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
-        j0c53 => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
-        j0c61 => "-:G:D:-:07 \@P2 LDG.E.CI.128 loadA0, [trackA];\n",
-        j0c62 => "-:G:D:-:07 \@P3 LDG.E.CI.128 loadB0, [trackB];\n",
+        j0c47 => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, $k_end, P5;\n",
+        j0c53 => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, $k_end, P6;\n",
+        j0c62 => "-:G:D:-:00 \@P2 LDG.E.CI.128 loadA0, [trackA];\n",
+        j0c63 => "-:G:D:-:00 \@P3 LDG.E.CI.128 loadB0, [trackB];\n",
 
         j1c47 => "-:-:-:-:00 \@P2 IADD   trackA0.CC, trackA0, 4x<8>;\n",
         j1c53 => "-:-:-:-:00 \@P3 IADD   trackB0.CC, trackB0, param_ldb8;\n",
@@ -233,13 +233,13 @@
         j3c53 => "-:-:-:-:00 IADD32I k, k, -8;\n",
 
         j5c47 => "T:-:D:S:00 TEXDEPBAR 0x1;\n", 
-        j5c53 => "-:-:D:S:02 \@P0 STS [writeAs + 4x<0*128>], loadA0;\n",
+        j5c53 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<0*128>], loadA0;\n",
         j5c61 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<1*128>], loadA1;\n",
         j5c62 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<2*128>], loadA2;\n",
-        j5c63 => "-:-:D:S:02 \@P0 STS [writeAs + 4x<3*128>], loadA3;\n",
+        j5c63 => "-:-:D:S:00 \@P0 STS [writeAs + 4x<3*128>], loadA3;\n",
 
-        j6c47 => "T:-:D:S:00 TEXDEPBAR 0x0;\n", 
-        j6c53 => "-:-:D:S:02 \@P0 STS.128 [writeBs], loadB0;\n",
+        j6c47 => "T:-:D:S:00 TEXDEPBAR 0x0;\n",
+        j6c53 => "-:-:D:S:00 \@P0 STS.128 [writeBs], loadB0;\n",
 
         j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
         j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",

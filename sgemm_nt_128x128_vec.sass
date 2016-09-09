@@ -175,19 +175,19 @@ REMAINDER:
 <CODE>
     our %insert =
     (
-        j0c47 => "-:-:-:-:00 ISETP.GE.AND P2, PT, k, 16, P5;\n",
-        j0c53 => "-:-:-:-:00 ISETP.GE.AND P3, PT, k, 16, P6;\n",
-        j0c61 => "-:G:D:-:07 \@P2 LDG.E.CI.128 loadA0, [trackA];\n",
-        j0c62 => "-:G:D:-:07 \@P3 LDG.E.CI.128 loadB0, [trackB];\n",
+        j0c47 => "-:G:D:-:03 ISETP.GE.AND P2, PT, k, 16, P5;\n",
+        j0c53 => "-:G:D:-:03 ISETP.GE.AND P3, PT, k, 16, P6;\n",
+        j0c61 => "-:G:D:-:00 \@P2 LDG.E.CI.128 loadA0, [trackA];\n",
+        j0c62 => "-:G:D:-:00 \@P3 LDG.E.CI.128 loadB0, [trackB];\n",
 
-        j1c47 => "-:-:-:-:00 IADD   trackB0.CC, trackB0, 4x<8>;\n",
-        j1c53 => "-:-:-:-:00 IADD   trackA0.CC, trackA0, 4x<8>;\n",
+        j1c47 => "-:G:D:-:03 IADD   trackB0.CC, trackB0, 4x<8>;\n",
+        j1c53 => "-:G:D:-:03 IADD   trackA0.CC, trackA0, 4x<8>;\n",
 
-        j2c47 => "-:-:-:-:00 IADD.X trackB1,    trackB1, RZ;\n",
-        j2c53 => "-:-:-:-:00 IADD.X trackA1,    trackA1, RZ;\n",
+        j2c47 => "-:G:D:-:03 IADD.X trackB1,    trackB1, RZ;\n",
+        j2c53 => "-:G:D:-:03 IADD.X trackA1,    trackA1, RZ;\n",
 
-        j3c47 => "-:-:-:-:00 ISETP.GE.AND P0, PT, k, 16, PT;\n",
-        j3c53 => "-:-:-:-:00 IADD32I k, k, -8;\n",
+        j3c47 => "-:G:D:-:03 ISETP.GE.AND P0, PT, k, 16, PT;\n",
+        j3c53 => "-:G:D:-:03 IADD32I k, k, -8;\n",
 
         j4c47 => "T:-:D:S:00 TEXDEPBAR 0x1;\n",
         j4c53 => "-:-:D:S:02 \@P1 STS [writeS + 4x<0*128>], loadA0;\n",
@@ -205,7 +205,7 @@ REMAINDER:
         j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
         j6c63 => "T:-:D:S:00 \@P0 BAR.SYNC 0;\n",
 
-        j7c47 => "-:-:-:-:00 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
+        j7c47 => "-:G:D:-:03 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
         j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n",
     );
     return;
