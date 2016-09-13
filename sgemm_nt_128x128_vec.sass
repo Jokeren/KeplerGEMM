@@ -189,21 +189,23 @@ REMAINDER:
         j3c47 => "-:G:D:-:03 ISETP.GE.AND P0, PT, k, 16, PT;\n",
         j3c53 => "-:G:D:-:03 IADD32I k, k, -8;\n",
 
-        j4c47 => "T:-:D:S:00 TEXDEPBAR 0x1;\n",
-        j4c53 => "-:-:D:S:02 \@P1 STS [writeS + 4x<0*128>], loadA0;\n",
-        j4c61 => "-:-:D:S:00 \@P1 STS [writeS + 4x<1*128>], loadA1;\n",
-        j4c62 => "-:-:D:S:00 \@P1 STS [writeS + 4x<2*128>], loadA2;\n",
-        j4c63 => "-:-:D:S:02 \@P1 STS [writeS + 4x<3*128>], loadA3;\n",
-
-        j5c47 => "T:-:D:S:00 TEXDEPBAR 0x0;\n",
-        j5c53 => "-:-:D:S:02 \@P1 STS [writeS + 4x<8*128>], loadB0;\n",
-        j5c61 => "-:-:D:S:00 \@P1 STS [writeS + 4x<9*128>], loadB1;\n",
-        j5c62 => "-:-:D:S:00 \@P1 STS [writeS + 4x<10*128>], loadB2;\n",
-        j5c63 => "-:-:D:S:02 \@P1 STS [writeS + 4x<11*128>], loadB3;\n",
-
         j6c61 => "-:-:-:-:00 \@P0 LOP.XOR readAs, readAs, 4x<128*8*2>;\n",
         j6c62 => "-:-:-:-:00 \@P0 LOP.XOR readBs, readBs, 4x<128*8*2>;\n",
-        j6c63 => "T:-:D:S:00 \@P0 BAR.SYNC 0;\n",
+        j6c63 => "T:-:D:S:00 TEXDEPBAR 0x0;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<8*128>], loadB0;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<9*128>], loadB1;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<10*128>], loadB2;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<11*128>], loadB3;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<0*128>], loadA0;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<1*128>], loadA1;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<2*128>], loadA2;\n".
+                 "-:G:-:-:15 \@P1 STS [writeS + 4x<3*128>], loadA3;\n".
+                 "-:-:-:-:00 NOP;\n".
+                 "-:-:-:-:00 NOP;\n".
+                 "-:-:-:-:00 NOP;\n".
+                 "-:-:-:-:00 NOP;\n".
+                 "-:-:-:-:00 NOP;\n".
+                 "T:-:D:S:00 \@P0 BAR.SYNC 0;\n",
 
         j7c47 => "-:G:D:-:03 \@P0 LOP.XOR writeS, writeS, 4x<128*8*2>;\n",
         j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n",
