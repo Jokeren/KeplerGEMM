@@ -23,7 +23,7 @@
 </CONSTANT_MAPPING>
 
 <REGISTER_MAPPING>
-  64-91 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid2, tid7, txa, txb, xmad_ta, xmad_tb, tid31, tid128, tidAY, tidBY, ta, tb, tmp_shl
+  64-91 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid2, tid7, txa, txb, xmad_ta, xmad_tb, tid31, tid128, tidBY, ta, tb, tmp_shl
   92-93 ~ tmp_param0, tmp_param1
 
   0-63 : czero<00-63>
@@ -52,7 +52,7 @@
 
   104-107 : trackA<0-1>, trackB<0-1>
 
-  108-110 ~ writeAs, writeBs, k
+  108-112 ~ writeAs, writeBs, k, k_and, tidAY
   // to avoid lds bank conflict with ffma 
   117 ~ readAs
   116 ~ readBs
@@ -145,15 +145,11 @@
 -:-:-:-:00 LOP.OR  readBs, readBs, tid7;
 -:-:-:-:00 ISCADD  readBs, readBs, 4x<128*8>, 4;
 
--:-:-:-:00 NOP;
--:-:-:-:00 NOP;
--:-:-:-:00 NOP;
-
   REMAINDER:
 
 <CODE>
     return q{
-      // k must be a multiple of 16
+      // k must be a multiple of 4
       // n must be a multiple of 4
       //       -
       //       -
@@ -169,18 +165,25 @@
       //       -
       //       -
       // tidAX ---- trackA ---- loadA0 -------- loadA4
+
+      // load if tidAY < k (tidAY == 0 if mod 4 not mod 8)
+      -:-:-:-:00 ISETP.LT.AND P5, PT, tidAY, k, P5;
       -:-:-:-:00 @P5 LD.E.CI.128 loadA0, [trackA];
+
+      // bDoRemainder = k & 7 && k > 8
+      -:-:-:-:00 LOP.AND k_and, k, 7;
+      -:-:-:-:00 ISETP.EQ.AND P1, PT, k_and, RZ, PT;
+      -:-:-:-:00 ISETP.GT.AND P1, PT, k, 8, !P1;
 
       -:-:-:-:00 @!P6 LDS.128 loadB0, [RZ + addr_zero];
       -:-:-:-:00 @!P5 LDS.128 loadA0, [RZ + addr_zero];
-
-      -:-:-:-:00 PSETP.AND.AND P1, PT, PT, PT, PT;
 
       // ----------------------
       // ---------------------- 
       // ---------------------- tidBY
       // ----- writeBS ---- loadB0
       // tidBX
+
       -:-:-:-:00 STS.128 [writeBs], loadB0;
 
       // ------------------
@@ -247,7 +250,8 @@
 
         j7c47 => "-:-:-:-:00 \@P0 LOP.XOR writeAs, writeAs, 4x<128*8*2>;\n",
         j7c53 => "-:-:-:-:00 \@P0 LOP.XOR writeBs, writeBs, 4x<128*8*2>;\n",
-        j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n",
+        j7c63 => "-:-:-:-:00 \@P0 BRA.U LOOP;\n".
+                 "-:-:-:-:00 \@P1 BRA.U REMAINDER;\n",
     );
     return;
 </CODE>
