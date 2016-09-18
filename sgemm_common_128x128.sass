@@ -203,7 +203,7 @@ LOOP:
 -:-:-:-:00 LOP.AND tid_96,  tid, 96;
 -:-:-:-:00 LOP.AND tid_128, tid, 128;
 
-// writeCs = readAs * 128 + readBs;
+// writeCs = readAs * 32 + readBs;
 -:-:-:-:00 LOP.AND readAs, readAs, 0xfff;
 -:-:-:-:00 LOP.AND readBs, readBs, 0xfff;
 -:-:-:-:00 ISCADD  writeCs, readAs, readBs, 5;

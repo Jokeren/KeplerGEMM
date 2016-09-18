@@ -167,7 +167,7 @@
 
 // (keren): A allocate 128 * 8 elements
 // readAs  = (((tid & 0x70) >> 3) | (tid & 1)) << 4
-// [6][5][4][0] * 4 * 4
+// [6][5][4][0] * 4
 // readAs = 0 : 1 : 64
 -:-:-:-:00 LOP.AND readAs, tid,    0x70;
 -:-:-:-:00 SHR.U32 readAs, readAs, 3;
