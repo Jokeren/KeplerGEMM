@@ -1,5 +1,3 @@
 # KeplerGEMM
 
--------------------------------------------------
-
-Faster GEMM for Kepler GPUs
+Faster GEMM
