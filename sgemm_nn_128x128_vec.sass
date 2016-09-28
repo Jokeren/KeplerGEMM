@@ -23,7 +23,7 @@
 </CONSTANT_MAPPING>
 
 <REGISTER_MAPPING>
-  64-91 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid2, tid7, txa, txb, xmad_ta, xmad_tb, tid31, tid128, tidBY, ta, tb, tmp_shl
+  64-91 ~ blkA, blkB, blkZ, tidAX, tidBX, lda, ldb, ldaz, ldbz, tid1, tid7, txa, txb, tid31, tid128, tidBY, ta, tb, tmp_shl
   92-93 ~ tmp_param0, tmp_param1
 
   0-63 : czero<00-63>
@@ -58,7 +58,7 @@
   116 ~ readBs
   115 ~ tid
 
-  64-75 ~ ldc, ci, xmad_c, tid_31, tid_96, tid_128, blockA, blockB, blockZ
+  64-75 ~ ldc, ci, tid_31, tid_96, tid_128, blockA, blockB, blockZ
   64-75 : c<0-7>, d3, d2, d1, d0
   76-85 : C00y<0-1>, C04y<0-1>, C08y<0-1>, C12y<0-1>
   86-101 ~ ldc1, ldc4, ldc60, ldcz, writeCs, readCs, cx<00|64>, cy<00|04|08|12>, alpha, beta, flags
